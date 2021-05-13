@@ -1,0 +1,44 @@
+<template>
+  <div class="home">
+    <h1>This is an app-sub home page</h1>
+    <h1>Welcome To Use SEEAI Template</h1>
+    <a-button @click='setUserInfo()'>modify global store</a-button>
+    <div>
+      <img :src='imgUrl' alt=''>
+    </div>
+    <pre>
+      {{userInfoReactive}}
+    </pre>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, toRaw, reactive, ref } from 'vue'
+import { QiankunActionsInstance, SharedModule } from '../src/common/services'
+
+export default defineComponent({
+  name: 'home',
+  setup () {
+    const shared = SharedModule.getShared()
+    const userInfo = shared.getUserInfo()
+    const userInfoReactive = ref(userInfo)
+    const setUserInfo = () => {
+      shared.setUserInfo()
+      userInfoReactive.value = shared.getUserInfo()
+    }
+    onMounted(() => {
+      QiankunActionsInstance.onGlobalStateChange((state, prev) => {
+        // state: 变更后的状态; prev 变更前的状态
+        console.log('来自其他应用的调用')
+      })
+      // 使用 shared 获取 token
+      console.log(userInfo, 'sub-app-userInfo')
+    })
+    return {
+      imgUrl: require('@images/logo.png'),
+      setUserInfo,
+      userInfoReactive
+    }
+  }
+})
+</script>
