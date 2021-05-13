@@ -6,7 +6,6 @@
     "install": "npm-run-all --serial install:*",
     "start": "npm-run-all --parallel start:*",
     "build": "npm-run-all --parallel build:*",
-    "install:main": "yarn",
     "install:app-main": "cd app-main/ && yarn",
     "start:app-main": "cd app-main/ && yarn start",
     "build:app-main": "cd app-main/ && yarn build",
