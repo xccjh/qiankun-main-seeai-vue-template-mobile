@@ -1,70 +1,37 @@
 <template>
   <div class="demo-construct">
-    <RedditOutlined style="font-size: 30px" />
-    <SyncOutlined
-      spin
-      style="font-size: 30px"
-    />
-    <SmileOutlined
-      :rotate="180"
-      style="font-size: 30px"
-    />
-    <HeartTwoTone
-      two-tone-color="#eb2f96"
-      style="font-size: 30px"
-    />
-    <svg-icon
-      icon="account-book"
-      style="width: 30px;height: 30px;"
-    />
-    <svg-icon
-      icon="aim"
-      style="width: 30px;height: 30px;"
-    />
-    <a-divider />
-    <h1>This is an demo-construct page --- {{ myCountComputed }}(computed)</h1>
-    <h1>This is an global store data change --- {{ storeCount }}</h1>
-    <h1>This is an local store data change --- {{ localCount }} --- {{ localMapCount }}(nameScoped mapState)</h1>
-    <a-button @click="incrementGlobal()">
-      add global storeCount
-    </a-button>
-    <a-button @click="incrementLocal()">
-      add local storeCount
-    </a-button>
-    <a-button @click="toLogin()">
-      go-to-login
-    </a-button>
-    <!--    <a-button @click='loadSubApp()'>load-sub-app</a-button>-->
-    <!--    <a-button @click='unLoadApp()'>destory-sub-app</a-button>-->
-    <hello-world />
-    <demo-children
-      :my-count="myCount"
-      @change-count="changeMyCount"
-    />
-    <pre>
-      {{ envVar }}
+    <van-icon name="contact" size='30'/>
+    <van-icon name="eye-o" size='30'/>
+    <van-icon name="share-o" size='30'/>
+    <van-icon name="shopping-cart-o" size='30'/>
+    <svg-icon icon='account-book' style='width: 30px;height: 30px;'></svg-icon>
+    <svg-icon icon='aim' style='width: 30px;height: 30px;'></svg-icon>
+    <van-divider/>
+    <h1>This is an demo-construct page --- {{myCountComputed}}(computed)</h1>
+    <h1>This is an global store data change --- {{storeCount}}</h1>
+    <h1>This is an local store data change --- {{localCount}} --- {{localMapCount}}(nameScoped mapState)</h1>
+    <van-button @click='incrementGlobal()'>add global storeCount</van-button>
+    <van-button @click='incrementLocal()'>add local storeCount</van-button>
+    <van-button @click='toLogin()'>go-to-login</van-button>
+    <demo-children @change-count='changeMyCount' :my-count='myCount'></demo-children>
+    <pre style='width:100%;overflow:auto;margin:50px 0'>
+      {{envVar}}
     </pre>
-    <div id="sub-app" />
   </div>
 </template>
 
 <script lang="ts">
-import { loadMicroApp } from 'qiankun'
 import { defineComponent, getCurrentInstance, onMounted, ref, computed, watch, watchEffect, reactive } from 'vue'
 import { RouteLocationNormalized, Router, useRoute, useRouter } from 'vue-router'
 import { useStore, createNamespacedHelpers } from 'vuex'
 import { DemoChildren } from './components'
-import { RedditOutlined, SyncOutlined, SmileOutlined, HeartTwoTone } from '@ant-design/icons-vue'
+
 const { mapState } = createNamespacedHelpers('DemoConstructStore')
 
 export default defineComponent({
-  name: 'DemoConstruct',
+  name: 'demo-construct',
   components: {
-    DemoChildren,
-    RedditOutlined,
-    SyncOutlined,
-    SmileOutlined,
-    HeartTwoTone
+    DemoChildren
   },
   setup () {
     const instance = getCurrentInstance()
@@ -83,7 +50,6 @@ export default defineComponent({
       console.log('route.query:', route.query)
     })
     // 注意抽离hook
-    let microApp
     const myCount = ref(2)
     const count = ref(0)
     const numbers = reactive([1, 2, 3, 4])
@@ -150,29 +116,22 @@ export default defineComponent({
       myCount,
       myCountComputed,
       changeMyCount,
-      storeCount: computed(() => store.state.storeCount),
-      localCount: computed(() => store.state.DemoConstructStore.localCount),
-      incrementGlobal () {
-        store.commit('increment')
-      },
-      incrementLocal () {
-        store.commit('DemoConstructStore/demoConstructIncrement')
-      }
-      // loadSubApp () {
-      //   microApp = loadMicroApp({
-      //     name: 'app-sub',
-      //     entry: 'http://localhost:9000/app-sub/#/app-sub',
-      //     container: '#sub-app',
-      //     props: {
-      //       name: 'app-sub'
-      //     }
-      //   })
-      // },
-      // unLoadApp () {
-      //   if (microApp) {
-      //     microApp.unmount()
-      //   }
-      // }
+      storeCount: computed(() => {
+        if (store) {
+          return store.state.storeCount
+        } else {
+          return undefined
+        }
+      }),
+      localCount: computed(() => {
+        if (store) {
+          return store.state.DemoConstructStore.localCount
+        } else {
+          return undefined
+        }
+      }),
+      incrementGlobal: () => store.commit('increment'),
+      incrementLocal: () => store.commit('DemoConstructStore/demoConstructIncrement')
     }
   },
   computed: {
@@ -184,3 +143,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang='less' scoped>
+  .demo-construct {
+    width: 100%;
+  }
+</style>

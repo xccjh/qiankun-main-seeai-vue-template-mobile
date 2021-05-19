@@ -2,7 +2,7 @@ import './public-path'
 import { createApp } from 'vue'
 import App from './App.vue'
 import '../style/index.scss'
-import { Antd } from './assets/plugins'
+import { vant } from './assets/plugins'
 import './registerServiceWorker'
 import router from './app/router'
 import store from './app/store'
@@ -18,7 +18,7 @@ const qiankun = window.__POWERED_BY_QIANKUN__
 function render (props:Json = {}) {
   const { container } = props
 
-  instance = createApp(App).use(store).use(router).use(CommonPart).use(Antd)
+  instance = createApp(App).use(store).use(router).use(CommonPart).use(vant)
   instance.config.globalProperties.qiankun = qiankun
   instance.mount(container ? container.querySelector('#app') : '#app')
 }

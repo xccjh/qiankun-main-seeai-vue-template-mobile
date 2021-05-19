@@ -1,19 +1,11 @@
 <template>
   <div class="demo-children">
-    <h1>This is an demo-children page --- {{ myCount }}(父子传值)</h1>
-    <a-button @click="emitMsg()">
-      Add
-    </a-button>
-    <a-button>Default</a-button>
-    <a-button type="primary">
-      Primary
-    </a-button>
-    <a-button type="dashed">
-      Dashed
-    </a-button>
-    <a-button type="danger">
-      Danger
-    </a-button>
+    <h1>This is an demo-children page --- {{myCount}}(父子传值)</h1>
+    <van-button @click='emitMsg()'>Add</van-button>
+    <van-button>Default</van-button>
+    <van-button type="primary">Primary</van-button>
+    <van-button type="dashed">Dashed</van-button>
+    <van-button type="danger">Danger</van-button>
   </div>
 </template>
 
@@ -21,7 +13,7 @@
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
-  name: 'DemoChildren',
+  name: 'demo-children',
   props: {
     myCount: {
       type: Number as PropType<number>,

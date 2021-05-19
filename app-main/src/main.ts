@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { Antd } from './assets/plugins'
+import { vant } from './assets/plugins'
 import router from './app/router'
 import store from './app/store'
 import CommonPart from './common'
@@ -29,7 +29,7 @@ startQiankun({
 //   { name: 'app-other-sub', entry: '//locahost:9001/app-other-sub/#/app-other-sub/app-other-sub' }
 // ])
 
-const app = createApp(App).use(store).use(router).use(CommonPart).use(Antd)
+const app = createApp(App).use(store).use(router).use(CommonPart).use(vant)
 app.config.globalProperties.micro = {}
 app.mount('#app')
 export { app }

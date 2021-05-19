@@ -2,7 +2,7 @@
   <div class="home">
     <h1>This is an app-sub home page</h1>
     <h1>Welcome To Use SEEAI Template</h1>
-    <a-button @click='setUserInfo()'>modify global store</a-button>
+    <van-button @click='setUserInfo()'>modify global store</van-button>
     <div>
       <img :src='imgUrl' alt=''>
     </div>

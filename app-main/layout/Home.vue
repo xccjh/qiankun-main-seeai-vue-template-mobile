@@ -9,23 +9,23 @@
       >
     </div>
     <br>
-    <a-button
+    <van-button
       style="margin-bottom:20px;"
       @click="loadSubPart($event)"
     >
       load app-sub part
-    </a-button>
+    </van-button>
     <br>
-    <a-button
+    <van-button
       style="margin-bottom:20px;"
       @click="loadOtherSubPart($event)"
     >
       load app-other-sub part
-    </a-button>
+    </van-button>
     <br>
-    <a-button @click="unMountPart($event)">
+    <van-button @click="unMountPart($event)">
       unmout app-sub&app-other-sub part
-    </a-button>
+    </van-button>
   </div>
 </template>
 

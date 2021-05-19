@@ -1581,6 +1581,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
+"@xccjh/nprogress@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@xccjh/nprogress/-/nprogress-1.0.0.tgz#aa61be911524ff861e27c49337c5335388852fa7"
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "http://npm.dev.hqjy.cn:80/@xtuc%2fieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -5766,10 +5770,6 @@ npm-run-path@^4.0.0:
   resolved "http://npm.dev.hqjy.cn:80/npm-run-path/-/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
   dependencies:
     path-key "^3.0.0"
-
-nprogress@^0.2.0:
-  version "0.2.0"
-  resolved "http://npm.dev.hqjy.cn:80/nprogress/-/nprogress-0.2.0.tgz#cb8f34c53213d895723fcbab907e9422adbcafb1"
 
 nth-check@^1.0.2:
   version "1.0.2"

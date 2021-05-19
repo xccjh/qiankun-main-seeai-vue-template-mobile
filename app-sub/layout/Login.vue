@@ -1,205 +1,124 @@
 <template>
-  <div class="container">
-    <div class="wrap">
-      <div class="top">
-        <div class="head">
-          <div class="head-logo">
-            <div class="logo-content" :style="logoImage">
-            </div>
-          </div>
-          <div class="head-title">
-            <p style="margin: 15px 0 10px 0;">开元教育</p>
-            <p>工作台</p>
-          </div>
+  <div class='container'>
+    <div class='form-box'>
+      <van-form @submit="onSubmit">
+        <van-field
+          v-model="state.userName"
+          left-icon="manager"
+          name="userName"
+          placeholder="用户名"
+          :rules="[{ required: true, message: '请填写用户名' }]"
+        />
+        <van-field
+          left-icon="lock"
+          v-model="state.password"
+          type="password"
+          name="password"
+          placeholder="密码"
+          :rules="[{ required: true, message: '请填写密码' }]"
+        />
+        <div class="button-container">
+          <van-button type="danger" native-type="submit" class='button-login' :loading='loading' loading-text="登录中...">
+            提交
+          </van-button>
         </div>
-      </div>
-      <div class='app-login'>
-        <a-form
-          ref="formRef"
-          :model="formState"
-          :wrapper-col="wrapperCol"
-          :rules="rules"
-        >
-          <a-form-item ref="userName" name="userName">
-            <a-input :value="formState.userName" placeholder="账号" size="large">
-              <template #prefix>
-                <UserOutlined style="color: rgba(0, 0, 0, 0.25)"/>
-              </template>
-            </a-input>
-          </a-form-item>
-          <a-form-item ref="password" name="password">
-            <a-input :value="formState.password" type="password" placeholder="密码" size="large">
-              <template #prefix>
-                <LockOutlined style="color: rgba(0, 0, 0, 0.25)"/>
-              </template>
-            </a-input>
-          </a-form-item>
-          <a-form-item ref="remember" name="remember">
-            <a-checkbox-group :value="formState.remember" size="large" style='float: left'>
-              <a-checkbox value="1" name="remember">记住密码</a-checkbox>
-            </a-checkbox-group>
-          </a-form-item>
-          <a-form-item :wrapper-col="{ span: 24}">
-            <a-button type="primary" @click="onSubmit()" block size="large" :loading="loading">登录</a-button>
-          </a-form-item>
-        </a-form>
-      </div>
+      </van-form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRaw, ref, UnwrapRef } from 'vue'
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
-import { LocalStorageUtil, SessionStorageUtil, ToolsUtil } from '../src/common/utils'
-import { auth } from '../src/app/api'
-import { message } from 'ant-design-vue'
+import { defineComponent, onMounted, toRaw, reactive, ref } from 'vue'
+import { LocalStorageUtil, SessionStorageUtil, ToolsUtil } from '@/common/utils'
+import { FormState, win } from '@/common/base'
+import { auth } from '@/app/api'
 import { Router, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { FormState, win } from '@/common/base'
+import { Toast } from 'vant'
 
 declare const window: win
-
 export default defineComponent({
   name: 'login',
   setup () {
-    const formRef = ref()
     const loading = ref(false)
     const router: Router = useRouter()
     const store = useStore()
-    const loginData = LocalStorageUtil.getLogin()
-    const formModal: FormState = {
+    const state = reactive({
       userName: '',
-      password: '',
-      remember: []
-    }
-    if (loginData.userName) {
-      formModal.userName = loginData.userName
-      formModal.password = loginData.password
-      formModal.remember = ['1']
-    }
-    const formState: UnwrapRef<FormState> = reactive(formModal)
-    const rules = {
-      userName: [
-        { required: true, message: '请输入用户账号', trigger: 'blur' }
-      ],
-      password: [
-        { required: true, message: '请输入密码', trigger: 'blur' }
-      ]
-    }
-    const onSubmit = () => {
-      formRef.value
-        .validate()
-        .then(() => {
-          LocalStorageUtil.clearAll()
-          SessionStorageUtil.clear()
-          const formValue = toRaw(formState)
-          const params = {
-            userName: formValue.userName,
-            password: formValue.password,
-            orgCode: ToolsUtil.getOrgCode(),
-            platformId: window.__platform__
-          }
-          loading.value = true
-          auth.login(params).then((result) => {
-            loading.value = false
-            const res = result.data
-            if (res.status === 200) {
-              if (formValue.remember[0]) {
-                LocalStorageUtil.putLogin(params)
-              } else {
-                LocalStorageUtil.removeLogin()
-              }
-              if (res.data.user && res.data.user.telphone) {
-                res.data.user.password = formValue.password
-                store.commit('setUserInfo', res.data.user)
-                router.push({
-                  name: 'app-index'
-                })
-              } else {
-                message.error('未登录或登录已过期，请重新登录。')
-              }
-            }
-          }).catch(() => {
-            loading.value = false
-          })
-        })
-        .catch((error: ValidateErrorEntity<FormState>) => {
-          console.log('error', error)
-        })
-    }
-
-    return {
-      wrapperCol: { span: 24 },
-      formRef,
-      formState,
-      loading,
-      rules,
-      onSubmit,
-      logoImage: {
-        backgroundImage: `url(${require('@images/logo.png')})`
+      password: ''
+    })
+    const onSubmit = (values) => {
+      loading.value = true
+      LocalStorageUtil.clearAll()
+      SessionStorageUtil.clear()
+      const params = {
+        userName: values.userName,
+        password: values.password,
+        orgCode: ToolsUtil.getOrgCode(),
+        platformId: window.__platform__
       }
+      auth.login(params).then((result) => {
+        loading.value = false
+        const res = result.data
+        if (res.status === 200) {
+          if (res.data.user && res.data.user.telphone) {
+            res.data.user.password = values.password
+            store.commit('setUserInfo', res.data.user)
+            Toast.success('登录成功')
+            router.push({
+              name: 'home'
+            })
+          } else {
+            Toast.fail('未登录或登录已过期，请重新登录。')
+          }
+        }
+      }).catch(() => {
+        loading.value = false
+      })
     }
-  },
-  components: {
-    UserOutlined,
-    LockOutlined
+    return {
+      state,
+      onSubmit
+    }
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang='scss' scoped>
   .container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    background-color: #f0f2f5;
-    background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
-    background-repeat: no-repeat;
-    background-position: center 110px;
-    background-size: 100%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url(https://seeai.hqjy.com/h5/login-bg.849fb84828b605250940.png);
+    @include bg;
 
-    .wrap {
-      flex: 1;
-      padding: 32px 0;
+    .form-box {
+      width: calc(100% - 70px);
+      box-sizing: border-box;
+      position: absolute;
+      margin: 0 35px;
+      top: 620px;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      padding: 20px;
 
-      .top {
-        text-align: center;
-        padding-top: 80px;
+      ::v-deep .van-icon {
+        font-size: 50px !important;
+      }
 
-        .head {
+      .button-container {
+        margin: 16px;
 
-          .head-logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 50%;
-
-            .logo-content {
-              background-size: cover;
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-            }
-          }
-
-          .head-title {
-            font-size: 30px;
-            color: #606060;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: bolder;
-            text-align: center;
-            margin-top: 8px;
-          }
+        .button-login {
+          width: 320px;
+          border-radius: 10px;
+          font-size: 30px;
+          height: 80px;
+          line-height: 80px;
+          border: 1px solid #d82727;
+          background-color: #ab2025;
         }
       }
-    }
-
-    .app-login {
-      display: block;
-      width: 368px;
-      margin: 0 auto;
     }
   }
 </style>

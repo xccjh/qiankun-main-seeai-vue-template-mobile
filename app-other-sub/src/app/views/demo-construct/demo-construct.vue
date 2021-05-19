@@ -1,46 +1,21 @@
 <template>
   <div class="demo-construct">
-    <RedditOutlined style="font-size: 30px" />
-    <SyncOutlined
-      spin
-      style="font-size: 30px"
-    />
-    <SmileOutlined
-      :rotate="180"
-      style="font-size: 30px"
-    />
-    <HeartTwoTone
-      two-tone-color="#eb2f96"
-      style="font-size: 30px"
-    />
-    <svg-icon
-      icon="account-book"
-      style="width: 30px;height: 30px;"
-    />
-    <svg-icon
-      icon="aim"
-      style="width: 30px;height: 30px;"
-    />
-    <a-divider />
-    <h1>This is an demo-construct page --- {{ myCountComputed }}(computed)</h1>
-    <h1>This is an global store data change --- {{ storeCount }}</h1>
-    <h1>This is an local store data change --- {{ localCount }} --- {{ localMapCount }}(nameScoped mapState)</h1>
-    <a-button @click="incrementGlobal()">
-      add global storeCount
-    </a-button>
-    <a-button @click="incrementLocal()">
-      add local storeCount
-    </a-button>
-    <a-button @click="toLogin()">
-      go-to-login
-    </a-button>
-    <hello-world />
-    <demo-children
-      :my-count="myCount"
-      @change-count="changeMyCount"
-    />
-    <pre>
-      {{ envVar }}
+    <van-icon name="contact" size='30'/>
+    <van-icon name="eye-o" size='30'/>
+    <van-icon name="share-o" size='30'/>
+    <van-icon name="shopping-cart-o" size='30'/>
+    <svg-icon icon='account-book' style='width: 30px;height: 30px;'></svg-icon>
+    <svg-icon icon='aim' style='width: 30px;height: 30px;'></svg-icon>
+    <van-divider/>
+    <h1>This is an demo-construct page --- {{myCountComputed}}(computed)</h1>
+    <h1>This is an global store data change --- {{storeCount}}</h1>
+    <h1>This is an local store data change --- {{localCount}} --- {{localMapCount}}(nameScoped mapState)</h1>
+    <van-button @click='incrementGlobal()'>add global storeCount</van-button>
+    <van-button @click='incrementLocal()'>add local storeCount</van-button>
+    <van-button @click='toLogin()'>go-to-login</van-button>
+    <demo-children @change-count='changeMyCount' :my-count='myCount'></demo-children>
+    <pre style='width:100%;overflow:auto;margin:50px 0'>
+      {{envVar}}
     </pre>
   </div>
 </template>
@@ -50,17 +25,13 @@ import { defineComponent, getCurrentInstance, onMounted, ref, computed, watch, w
 import { RouteLocationNormalized, Router, useRoute, useRouter } from 'vue-router'
 import { useStore, createNamespacedHelpers } from 'vuex'
 import { DemoChildren } from './components'
-import { RedditOutlined, SyncOutlined, SmileOutlined, HeartTwoTone } from '@ant-design/icons-vue'
+
 const { mapState } = createNamespacedHelpers('DemoConstructStore')
 
 export default defineComponent({
-  name: 'DemoConstruct',
+  name: 'demo-construct',
   components: {
-    DemoChildren,
-    RedditOutlined,
-    SyncOutlined,
-    SmileOutlined,
-    HeartTwoTone
+    DemoChildren
   },
   setup () {
     const instance = getCurrentInstance()
@@ -172,3 +143,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang='less' scoped>
+  .demo-construct {
+    width: 100%;
+  }
+</style>

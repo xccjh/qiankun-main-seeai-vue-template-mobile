@@ -2,9 +2,9 @@ import store from '../store/index'
 import router from '../router'
 import { LocalStorageUtil } from '@/common/utils'
 import { errorCodeMap } from './error-code'
-import { notification, message } from 'ant-design-vue'
 
 import { AxiosInstance } from 'axios'
+import { Toast } from 'vant'
 
 export default (service: AxiosInstance) => {
   const toggleLoading = (flag: boolean) => {
@@ -35,7 +35,10 @@ export default (service: AxiosInstance) => {
     (error) => {
       axiosNum--
       toggleLoading(false)
-      notification.error('未知错误！')
+      Toast.fail({
+        message: '未知错误！',
+        icon: 'close'
+      })
       console.warn('未可知错误，大部分是由于后端不支持CORS或无效配置引起')
       return Promise.reject(error)
     }
@@ -53,20 +56,39 @@ export default (service: AxiosInstance) => {
         const body = response.data
         if (body) {
           if (body.status === 401) {
-            message.error('未登录或登录已过期，请重新登录。')
+            Toast.fail({
+              message: '未登录或登录已过期，请重新登录。',
+              icon: 'close'
+            })
             LocalStorageUtil.removeUser()
             goTo('/login')
           } else if (body.status === 1024) {
-            message.error(body.message)
+            Toast.fail({
+              message: body.message,
+              icon: 'close'
+            })
           } else if (body.status === 1025) {
-            message.error('参数为空。')
+            Toast.fail({
+              message: '参数为空。',
+              icon: 'close'
+            })
           } else if (body.status === 503) {
-            message.error(body.message)
+            Toast.fail({
+              message: body.message,
+              icon: 'close'
+            })
           } else if (body.status === 204) {
-            message.success(body.message)
+            Toast.fail({
+              message: body.message,
+              icon: 'close'
+            })
           } else if (body.status === 201) {
-            message.success(body.message)
+            Toast.fail({
+              message: body.message,
+              icon: 'close'
+            })
           }
+
           return response
         } else {
           return response
@@ -75,30 +97,39 @@ export default (service: AxiosInstance) => {
       switch (response.status) {
         case 401: // 未登录
         case 403: // token过期
-          notification.error({
-            message: '未登录或登录过期，请重新登录'
+          Toast.fail({
+            message: '未登录或登录过期，请重新登录',
+            icon: 'close'
           })
           LocalStorageUtil.removeLogin() // 清除token
           // store.commit("loginSuccess", ""); //全局通知loginSuccess为空
           goTo('/login')
           break
         case 404:
-          notification.error({
-            message: '网络请求不存在'
+          Toast.fail({
+            message: '网络请求不存在',
+            icon: 'close'
           })
           break
         case 500:
         case 501:
         case 503: // 服务端错误
-          notification.error({
-            message: '服务端异常，请您稍后重试！'
+          Toast.fail({
+            message: '服务端异常，请您稍后重试！',
+            icon: 'close'
           })
           break
         default:
           if (errorCodeMap[response.status]) {
-            notification.error(errorCodeMap[response.status])
+            Toast.fail({
+              message: errorCodeMap[response.status],
+              icon: 'close'
+            })
           } else {
-            notification.error('未知错误！')
+            Toast.fail({
+              message: '未知错误！',
+              icon: 'close'
+            })
           }
           break
       }
@@ -108,7 +139,11 @@ export default (service: AxiosInstance) => {
     (error) => {
       axiosNum--
       toggleLoading(false)
-      notification.error('未知错误！')
+      Toast.fail({
+        message: '未知错误！',
+        icon: 'close'
+      })
+
       console.warn('未可知错误，大部分是由于后端不支持CORS或无效配置引起')
       return Promise.reject(error)
     }

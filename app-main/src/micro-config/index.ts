@@ -1,5 +1,5 @@
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import NProgress from '@xccjh/nprogress'
+import '@xccjh/nprogress/nprogress.css'
 import {
   registerMicroApps,
   start,

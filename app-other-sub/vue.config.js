@@ -128,7 +128,7 @@ module.exports = {
   },
   pluginOptions: {
     'style-resources-loader': {
-      preProcessor: 'less',
+      preProcessor: 'scss',
       patterns: [
         path.join(__dirname, 'style/_mixin.scss')
       ]
