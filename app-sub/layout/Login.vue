@@ -78,7 +78,8 @@ export default defineComponent({
     }
     return {
       state,
-      onSubmit
+      onSubmit,
+      loading
     }
   }
 })
