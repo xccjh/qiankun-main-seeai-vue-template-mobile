@@ -4,82 +4,43 @@
       <div class="top">
         <div class="head">
           <div class="head-logo">
-            <div
-              class="logo-content"
-              :style="logoImage"
-            />
+            <div class="logo-content" :style="logoImage">
+            </div>
           </div>
           <div class="head-title">
-            <p style="margin: 15px 0 10px 0;">
-              开元教育
-            </p>
+            <p style="margin: 15px 0 10px 0;">开元教育</p>
             <p>工作台</p>
           </div>
         </div>
       </div>
-      <div class="app-login">
+      <div class='app-login'>
         <a-form
           ref="formRef"
           :model="formState"
           :wrapper-col="wrapperCol"
           :rules="rules"
         >
-          <a-form-item
-            ref="userName"
-            name="userName"
-          >
-            <a-input
-              [value]="formState.userName"
-              placeholder="账号"
-              size="large"
-            >
+          <a-form-item ref="userName" name="userName">
+            <a-input :value="formState.userName" placeholder="账号" size="large">
               <template #prefix>
-                <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
+                <UserOutlined style="color: rgba(0, 0, 0, 0.25)"/>
               </template>
             </a-input>
           </a-form-item>
-          <a-form-item
-            ref="password"
-            name="password"
-          >
-            <a-input
-              [value]="formState.password"
-              type="password"
-              placeholder="密码"
-              size="large"
-            >
+          <a-form-item ref="password" name="password">
+            <a-input :value="formState.password" type="password" placeholder="密码" size="large">
               <template #prefix>
-                <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
+                <LockOutlined style="color: rgba(0, 0, 0, 0.25)"/>
               </template>
             </a-input>
           </a-form-item>
-          <a-form-item
-            ref="remember"
-            name="remember"
-          >
-            <a-checkbox-group
-              [value]="formState.remember"
-              size="large"
-              style="float: left"
-            >
-              <a-checkbox
-                value="1"
-                name="remember"
-              >
-                记住密码
-              </a-checkbox>
+          <a-form-item ref="remember" name="remember">
+            <a-checkbox-group :value="formState.remember" size="large" style='float: left'>
+              <a-checkbox value="1" name="remember">记住密码</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 24}">
-            <a-button
-              type="primary"
-              block
-              size="large"
-              :loading="loading"
-              @click="onSubmit()"
-            >
-              登录
-            </a-button>
+            <a-button type="primary" @click="onSubmit()" block size="large" :loading="loading">登录</a-button>
           </a-form-item>
         </a-form>
       </div>
@@ -92,32 +53,33 @@ import { defineComponent, reactive, toRaw, ref, UnwrapRef } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
 import { LocalStorageUtil, SessionStorageUtil, ToolsUtil } from '../src/common/utils'
-
 import { auth } from '../src/app/api'
 import { message } from 'ant-design-vue'
 import { Router, useRouter } from 'vue-router'
-import { win, FormState } from '../src/common/base'
-import { qiankunActions } from '../src/micro-config'
 import { useStore } from 'vuex'
+import { FormState, win } from '@/common/base'
 
 declare const window: win
 
 export default defineComponent({
-  name: 'Login',
-  components: {
-    UserOutlined,
-    LockOutlined
-  },
+  name: 'login',
   setup () {
     const formRef = ref()
     const loading = ref(false)
     const router: Router = useRouter()
     const store = useStore()
-    const formState: UnwrapRef<FormState> = reactive({
+    const loginData = LocalStorageUtil.getLogin()
+    const formModal: FormState = {
       userName: '',
       password: '',
       remember: []
-    })
+    }
+    if (loginData.userName) {
+      formModal.userName = loginData.userName
+      formModal.password = loginData.password
+      formModal.remember = ['1']
+    }
+    const formState: UnwrapRef<FormState> = reactive(formModal)
     const rules = {
       userName: [
         { required: true, message: '请输入用户账号', trigger: 'blur' }
@@ -153,7 +115,7 @@ export default defineComponent({
                 res.data.user.password = formValue.password
                 store.commit('setUserInfo', res.data.user)
                 router.push({
-                  name: 'index'
+                  name: 'app-index'
                 })
               } else {
                 message.error('未登录或登录已过期，请重新登录。')
@@ -179,6 +141,10 @@ export default defineComponent({
         backgroundImage: `url(${require('@images/logo.png')})`
       }
     }
+  },
+  components: {
+    UserOutlined,
+    LockOutlined
   }
 })
 </script>

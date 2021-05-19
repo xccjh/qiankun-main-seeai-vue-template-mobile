@@ -131,7 +131,7 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'less',
       patterns: [
-        // 'E:\\seeai-template\\path\\to\\global.less'
+        path.join(__dirname, 'style/_mixin.scss')
       ]
     }
   }

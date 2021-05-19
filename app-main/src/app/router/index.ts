@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: appMainBase,
-    component: () => import(/* webpackChunkName: "micro-app-main" */ '/layout/AppMainIndex.vue'),
+    component: () => import(/* webpackChunkName: "micro-app-main" */ '@layout/AppMainIndex.vue'),
     name: appMainName,
     meta: {
       name: '主页'
@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'home',
-        component: () => import(/* webpackChunkName: "home" */ '/layout/Home.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@layout/Home.vue'),
         name: 'home',
         meta: {
           name: '首页'
@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    component: () => import(/* webpackChunkName: "login" */ '/layout/Login.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@layout/Login.vue'),
     name: 'login',
     meta: {
       name: '登录'

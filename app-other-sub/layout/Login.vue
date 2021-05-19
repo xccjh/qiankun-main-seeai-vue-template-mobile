@@ -21,21 +21,21 @@
           :rules="rules"
         >
           <a-form-item ref="userName" name="userName">
-            <a-input [value]="formState.userName" placeholder="账号" size="large">
+            <a-input :value="formState.userName" placeholder="账号" size="large">
               <template #prefix>
                 <UserOutlined style="color: rgba(0, 0, 0, 0.25)"/>
               </template>
             </a-input>
           </a-form-item>
           <a-form-item ref="password" name="password">
-            <a-input [value]="formState.password" type="password" placeholder="密码" size="large">
+            <a-input :value="formState.password" type="password" placeholder="密码" size="large">
               <template #prefix>
                 <LockOutlined style="color: rgba(0, 0, 0, 0.25)"/>
               </template>
             </a-input>
           </a-form-item>
           <a-form-item ref="remember" name="remember">
-            <a-checkbox-group [value]="formState.remember" size="large" style='float: left'>
+            <a-checkbox-group :value="formState.remember" size="large" style='float: left'>
               <a-checkbox value="1" name="remember">记住密码</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
@@ -53,20 +53,13 @@ import { defineComponent, reactive, toRaw, ref, UnwrapRef } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
 import { LocalStorageUtil, SessionStorageUtil, ToolsUtil } from '../src/common/utils'
-
 import { auth } from '../src/app/api'
 import { message } from 'ant-design-vue'
 import { Router, useRouter } from 'vue-router'
-import { win } from '../../app-main/src/common/base'
 import { useStore } from 'vuex'
+import { FormState, win } from '@/common/base'
 
 declare const window: win
-
-  interface FormState {
-    userName: string;
-    password: string;
-    remember: ('1' | undefined)[]
-  }
 
 export default defineComponent({
   name: 'login',
@@ -74,12 +67,19 @@ export default defineComponent({
     const formRef = ref()
     const loading = ref(false)
     const router: Router = useRouter()
-
-    const formState: UnwrapRef<FormState> = reactive({
+    const store = useStore()
+    const loginData = LocalStorageUtil.getLogin()
+    const formModal: FormState = {
       userName: '',
       password: '',
       remember: []
-    })
+    }
+    if (loginData.userName) {
+      formModal.userName = loginData.userName
+      formModal.password = loginData.password
+      formModal.remember = ['1']
+    }
+    const formState: UnwrapRef<FormState> = reactive(formModal)
     const rules = {
       userName: [
         { required: true, message: '请输入用户账号', trigger: 'blur' }
@@ -88,7 +88,6 @@ export default defineComponent({
         { required: true, message: '请输入密码', trigger: 'blur' }
       ]
     }
-    const store = useStore()
     const onSubmit = () => {
       formRef.value
         .validate()
@@ -116,7 +115,7 @@ export default defineComponent({
                 res.data.user.password = formValue.password
                 store.commit('setUserInfo', res.data.user)
                 router.push({
-                  name: 'index'
+                  name: 'app-index'
                 })
               } else {
                 message.error('未登录或登录已过期，请重新登录。')

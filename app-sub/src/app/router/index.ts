@@ -17,19 +17,19 @@ const LocalRoute = {
   path: sub,
   name: 'base-construct',
   meta: { name: 'base-construct' },
-  component: () => import(/* webpackChunkName: "base-construct" */ '/layout/BaseConstruct.vue'),
+  component: () => import(/* webpackChunkName: "base-construct" */ '@layout/BaseConstruct.vue'),
   children: [
     {
       path: '',
       name: 'app-sub-index',
-      component: () => import(/* webpackChunkName: "app-sub-index" */ '/layout/AppSubIndex.vue'),
+      component: () => import(/* webpackChunkName: "app-sub-index" */ '@layout/AppSubIndex.vue'),
       meta: {
         name: '主页'
       },
       children: [
         {
           path: 'home',
-          component: () => import(/* webpackChunkName: "home" */ '/layout/Home.vue'),
+          component: () => import(/* webpackChunkName: "home" */ '@layout/Home.vue'),
           name: 'home',
           meta: {
             name: '首页'
@@ -40,7 +40,7 @@ const LocalRoute = {
     },
     {
       path: 'login',
-      component: () => import(/* webpackChunkName: "login" */ '/layout/Login.vue'),
+      component: () => import(/* webpackChunkName: "login" */ '@layout/Login.vue'),
       name: 'login',
       meta: {
         name: '登录页'
@@ -52,19 +52,19 @@ const mainRoute = {
   path: main,
   name: 'micro-base-construct',
   meta: { name: 'base-construct' },
-  component: () => import(/* webpackChunkName: "base-construct" */ '/layout/BaseConstruct.vue'),
+  component: () => import(/* webpackChunkName: "base-construct" */ '@layout/BaseConstruct.vue'),
   children: [
     {
       path: '',
       name: 'micro-app-main-index',
-      component: () => import(/* webpackChunkName: "app-sub-index" */ '/layout/AppSubIndex.vue'),
+      component: () => import(/* webpackChunkName: "app-sub-index" */ '@layout/AppSubIndex.vue'),
       meta: {
         name: '主页'
       },
       children: [
         {
           path: 'home',
-          component: () => import(/* webpackChunkName: "home" */ '/layout/Home.vue'),
+          component: () => import(/* webpackChunkName: "home" */ '@layout/Home.vue'),
           name: 'micro-home',
           meta: {
             name: '首页'
@@ -75,7 +75,7 @@ const mainRoute = {
     },
     {
       path: 'login',
-      component: () => import(/* webpackChunkName: "login" */ '/layout/Login.vue'),
+      component: () => import(/* webpackChunkName: "login" */ '@layout/Login.vue'),
       name: 'micro-login',
       meta: {
         name: '登录页'
