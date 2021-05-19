@@ -1,7 +1,7 @@
 {
   "name": "qiankun-main-seeai-vue-template",
   "version": "1.0.0",
-  "description": "整合乾坤SEEAI通用vue主应用模板",
+  "description": "整合乾坤SEEAI通用vue主应用移动端模板",
   "scripts": {
     "install": "npm-run-all --serial install:*",
     "start": "npm-run-all --parallel start:*",
