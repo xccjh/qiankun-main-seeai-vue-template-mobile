@@ -1,7 +1,7 @@
-import { service } from './requestInstant'
+import { post } from './http'
 
 export const auth = {
   login (params) {
-    return service.post('sys/user/login', null, { params })
+    return post('sys/user/login', params)
   }
 }

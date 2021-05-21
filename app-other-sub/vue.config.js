@@ -30,9 +30,20 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        // data: '@import "./theme/default/index.scss";'
+        // data: '@import "./theme/default/index.less";'
       },
-      less: { javascriptEnabled: true }
+      less: {
+        javascriptEnabled: true,
+        // modifyVars: {
+        //   'primary-color': '#00AB84'
+        // }
+        modifyVars: {
+          hack: `true; @import "${path.join(
+            __dirname,
+            './theme/default/index.less'
+          )}";`
+        }
+      }
     }
   },
   chainWebpack: config => {
@@ -97,6 +108,12 @@ module.exports = {
         name: 'img/[name].[hash:8].[ext]'
       })
     config.plugins.delete('prefetch')
+    config
+      .plugin('html')
+      .tap(options => {
+        options[0].title = 'SEE·AI'
+        return options
+      })
     if (process.env.NODE_ENV === 'production') {
       config.plugin('compression').use(CompressionWebpackPlugin, [{
         algorithm: 'gzip',

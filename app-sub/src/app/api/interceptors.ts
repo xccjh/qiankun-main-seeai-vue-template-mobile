@@ -77,6 +77,11 @@ export default (service: AxiosInstance) => {
               message: body.message,
               icon: 'close'
             })
+          } else if (body.status === 500) {
+            Toast.fail({
+              message: body.message,
+              icon: 'close'
+            })
           } else if (body.status === 204) {
             Toast.fail({
               message: body.message,

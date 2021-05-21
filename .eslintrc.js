@@ -20,6 +20,8 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off', // 允许require
     '@typescript-eslint/no-empty-function': 'off', // 允许空函数
     '@typescript-eslint/ban-ts-comment': 'off', // 支持ts-ignore
+    'vue/valid-v-model':['off'],
+    'vue/no-v-model-argument':['off'],
     'camelcase': ['warn'],
     'no-undef': ['warn']
   }

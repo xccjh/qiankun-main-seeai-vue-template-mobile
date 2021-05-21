@@ -1,12 +1,13 @@
 import { LocalStorageUtil, ToolsUtil } from '@/common/utils'
 import axios from 'axios' // 引入axios的第三方插件
 import interceptor from './interceptors'
+
 export const getHeader = () => ({
   'x-header-atr': 'manage',
-  token: LocalStorageUtil.getUserToken(),
-  userId: LocalStorageUtil.getUserId(),
-  orgCode: ToolsUtil.getOrgCode(),
-  stuId: LocalStorageUtil.getUserId()
+  token: LocalStorageUtil.getUserToken() || '',
+  userId: LocalStorageUtil.getUserId() || '',
+  orgCode: ToolsUtil.getOrgCode() || '',
+  stuId: LocalStorageUtil.getUserId() || ''
 })
 
 /* 常规的 */
