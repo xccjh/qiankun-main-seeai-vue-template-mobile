@@ -1,19 +1,27 @@
 <template>
-  <div>
-    <router-view />
-    <div id="frame" />
+  <div style='height:100%;overflow: hidden;'>
+    <router-view/>
+    <div id="frame"
+         v-if="((!(route?.path === '/login' || route?.path.indexOf('/micro-app-main') === 0)) || route?.path === '/') && microApp"></div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, getCurrentInstance } from 'vue'
 import { win } from '@/common/base'
+import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
 
 declare const window: win
 export default defineComponent({
   name: 'App',
   setup () {
     window.__platform__ = 'platform-scholar'
-    return { }
+    const instance = getCurrentInstance()
+    const microApp = instance?.appContext.config.globalProperties.microApp
+    const route: RouteLocationNormalizedLoaded = useRoute()
+    return {
+      route,
+      microApp
+    }
   }
 })
 

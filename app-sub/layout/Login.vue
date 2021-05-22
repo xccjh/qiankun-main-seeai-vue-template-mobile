@@ -35,6 +35,7 @@ import { auth } from '@/app/api'
 import { Router, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
+import { SharedModule } from '@/common/services'
 
 declare const window: win
 export default defineComponent({
@@ -63,7 +64,7 @@ export default defineComponent({
         if (res.status === 200) {
           if (res.data.user && res.data.user.telphone) {
             res.data.user.password = values.password
-            store.commit('setUserInfo', res.data.user)
+            SharedModule.getShared().setUserInfo(res.data.user)
             Toast.success('登录成功')
             router.push({
               name: 'home'

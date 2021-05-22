@@ -9,6 +9,7 @@ import store from './app/store'
 import CommonPart from './common'
 import { Json } from '@/common/base'
 import { win } from '@/common/base/common'
+import { QiankunActionsInstance, SharedModule } from '@/common/services'
 
 declare const window: win
 
@@ -16,6 +17,12 @@ let instance
 const qiankun = window.__POWERED_BY_QIANKUN__
 
 function render (props:Json = {}) {
+  if (props) {
+    // 注入 actions 实例
+    QiankunActionsInstance.setActions(props)
+    const { shared = SharedModule.getShared() } = props
+    SharedModule.overloadShared(shared)
+  }
   const { container } = props
 
   instance = createApp(App).use(store).use(router).use(CommonPart).use(vant)

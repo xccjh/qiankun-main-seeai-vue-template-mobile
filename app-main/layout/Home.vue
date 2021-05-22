@@ -63,15 +63,15 @@ export default defineComponent({
         const micro = instance.appContext.config.globalProperties.micro
         const divDom2 = document.createElement('div')
         divDom2.id = 'microApp2'
-        divDom2.style.width = '400px'
-        divDom2.style.height = '400px'
+        divDom2.style.width = '80%'
+        divDom2.style.height = '40%'
         divDom2.style.position = 'fixed'
         divDom2.style.zIndex = '99999'
         divDom2.style.overflow = 'auto'
-        divDom2.style.right = '10%'
-        divDom2.style.top = '50%'
+        divDom2.style.left = '50%'
+        divDom2.style.top = '30%'
         divDom2.style.backgroundColor = 'white'
-        divDom2.style.transform = 'translateY(-50%)'
+        divDom2.style.transform = 'translate(-50%,-50%)'
         divDom2.style.boxShadow = '0 0 10px grey'
         document.body.appendChild(divDom2)
         micro.microApp2 = loadMicroApp({
@@ -91,15 +91,15 @@ export default defineComponent({
         const micro = instance.appContext.config.globalProperties.micro
         const divDom1 = document.createElement('microApp1')
         divDom1.id = 'microApp1'
-        divDom1.style.width = '400px'
-        divDom1.style.height = '400px'
+        divDom1.style.width = '80%'
+        divDom1.style.height = '40%'
         divDom1.style.position = 'fixed'
         divDom1.style.zIndex = '99999'
         divDom1.style.overflow = 'auto'
-        divDom1.style.left = '10%'
-        divDom1.style.top = '50%'
+        divDom1.style.left = '50%'
+        divDom1.style.top = '30%'
         divDom1.style.backgroundColor = 'white'
-        divDom1.style.transform = 'translateY(-50%)'
+        divDom1.style.transform = 'translate(-50%,-50%)'
         divDom1.style.boxShadow = '0 0 10px grey'
         document.body.appendChild(divDom1)
         // store.commit('setContainer', '#child')

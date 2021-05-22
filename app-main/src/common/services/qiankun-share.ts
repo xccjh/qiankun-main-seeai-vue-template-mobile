@@ -1,6 +1,5 @@
 import store from '@/app/store'
 import { Json } from '@/common/base'
-import { qiankunActions } from '@/micro-config'
 
 class Shared {
   /**
@@ -10,8 +9,8 @@ class Shared {
     return store.getters.userInfo
   }
 
-  public setUserInfo () {
-    store.commit('setUserInfo', { ...store.getters.userInfo, nickName: 'testChange' })
+  public setUserInfo (data) {
+    store.commit('setUserInfo', data)
   }
 }
 

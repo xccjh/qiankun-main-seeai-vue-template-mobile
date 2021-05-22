@@ -2,8 +2,34 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import { MicroApp } from 'qiankun/es/interfaces'
 import { app } from '@/main'
 import { serialPromises2 } from '@/common/utils'
-
+import store from '../store'
 export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, next:NavigationGuardNext) => {
+  if (to.path === '/login') {
+    if (store.getters.userInfo.token) {
+      microhandler(() => {
+        next({
+          name: 'home'
+        })
+      })
+    } else {
+      microhandler(() => {
+        next()
+      })
+    }
+  } else {
+    if (store.getters.userInfo.token) {
+      microhandler(() => {
+        next()
+      })
+    } else {
+      microhandler(() => {
+        next('/login')
+      })
+    }
+  }
+}
+
+const microhandler = (next) => {
   // 路由跳转卸载局部微应用
   const micro: { [index: string]: MicroApp } = app.config.globalProperties.micro
   const microArr: Promise<null>[] = []
