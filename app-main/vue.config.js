@@ -1,4 +1,5 @@
 const path = require('path')
+const ThemeSwitchPlugin = require('@xccjh/vue3-theme-peel')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = ['js', 'css', 'txt', 'svg', 'eot', 'woff', 'ttf', 'svg', 'ico', 'png']
 const { microAppSetting } = require('../package.json')
@@ -6,6 +7,7 @@ const microMainConfig = (microAppSetting[process.env.NODE_ENV] || [{ base: '' }]
 const port = process.env.NODE_ENV === 'development' ? 8089 : microMainConfig.port
 const publicPath = `${microMainConfig.host}:${port}/micro-app-main/`
 const { name } = require('./package')
+const dev = process.env.NODE_ENV === 'development'
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -38,16 +40,62 @@ module.exports = {
         // modifyVars: {
         //   'primary-color': '#00AB84'
         // }
-        modifyVars: {
-          hack: `true; @import "${path.join(
-            __dirname,
-            './theme/default/index.less'
-          )}";`
-        }
+        // modifyVars: {
+        //   hack: `true; @import "${path.join(
+        //     __dirname,
+        //     './theme/default/index.less'
+        //   )}";`
+        // }
       }
     }
   },
   chainWebpack: config => {
+    const newLoader = {
+        loader: ThemeSwitchPlugin.loader,
+        options: {}
+      }
+    ;['normal', 'vue-modules', 'vue', 'normal-modules'].forEach((item) => {
+      ['css', 'scss', 'sass', 'less', 'stylus'].forEach((style) => {
+        const originUse = config.module.rule(style).oneOf(item).toConfig().use
+        originUse.splice(0, 1, newLoader)
+        config.module.rule(style).oneOf(item).uses.clear()
+        config.module.rule(style).oneOf(item).merge({ use: originUse })
+      })
+    })
+    if (!dev) {
+      config.devtool('none')
+      config
+        .plugins.delete('extract-css')
+      config
+        .plugin('ThemeSwitchPlugin')
+        .use(ThemeSwitchPlugin, [{
+          filename: 'css/[name].[hash:8].css',
+          chunkFilename: 'css/[name].[contenthash:8].css'
+        }]).before('html')
+      config.optimization.minimizer('terser').tap(args => {
+        args[0].sourceMap = false
+        return args
+      })
+      config
+        .plugin('ThemeSwitchPluginInject')
+        .use(ThemeSwitchPlugin.inject, [{
+          publicPath
+        }])
+    } else {
+      config
+        .plugin('ThemeSwitchPlugin')
+        .use(ThemeSwitchPlugin.inject)
+    }
+    config.plugin('html').tap(args => {
+      const param = args[0]
+      param.minify = {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      }
+      param.chunksSortMode = 'dependency'
+      return [param]
+    })
     config.module
       .rule('eslint')
       .use('eslint-loader')

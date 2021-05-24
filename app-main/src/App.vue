@@ -9,11 +9,13 @@
 import { defineComponent, getCurrentInstance } from 'vue'
 import { win } from '@/common/base'
 import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router'
+import { ToolsUtil } from '@/common/utils'
 
 declare const window: win
 export default defineComponent({
   name: 'App',
   setup () {
+    ToolsUtil.initTheme()
     window.__platform__ = 'platform-scholar'
     const instance = getCurrentInstance()
     const microApp = instance?.appContext.config.globalProperties.microApp

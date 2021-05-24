@@ -32,7 +32,7 @@ import { defineComponent, onMounted, toRaw, reactive, ref } from 'vue'
 import { LocalStorageUtil, SessionStorageUtil, ToolsUtil } from '@/common/utils'
 import { FormState, win } from '@/common/base'
 import { auth } from '@/app/api'
-import { Router, useRouter } from 'vue-router'
+import { RouteLocationNormalizedLoaded, Router, useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { SharedModule } from '@/common/services'
@@ -44,6 +44,7 @@ export default defineComponent({
     const loading = ref(false)
     const router: Router = useRouter()
     const store = useStore()
+    const route:RouteLocationNormalizedLoaded = useRoute()
     const state = reactive({
       userName: '',
       password: ''
@@ -67,7 +68,8 @@ export default defineComponent({
             SharedModule.getShared().setUserInfo(res.data.user)
             Toast.success('登录成功')
             router.push({
-              name: 'home'
+              name: 'home',
+              query: route.query
             })
           } else {
             Toast.fail('未登录或登录已过期，请重新登录。')

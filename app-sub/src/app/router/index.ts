@@ -10,7 +10,7 @@ import { guard } from './guard'
 const { name } = require('../../../package.json')
 const { microAppSetting } = require('../../../../package.json')
 const currentSetting = microAppSetting[process.env.NODE_ENV].filter(item => item.name === name)[0]
-const mainSub = currentSetting.activeRule.split('#')
+const mainSub = currentSetting.activeRule.split('/#')
 const main = mainSub[0]
 const sub = mainSub[1]
 const LocalRoute = {
@@ -87,7 +87,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'index',
-    redirect: sub,
+    redirect: sub + '/login',
     meta: {
       name: '入口'
     }

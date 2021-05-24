@@ -4,11 +4,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { win } from '@/common/base'
+import { ToolsUtil } from '@/common/utils'
 
 declare const window: win
 export default defineComponent({
   name: 'App',
   setup () {
+    ToolsUtil.initTheme()
     window.__platform__ = 'platform-scholar'
     return {}
   }

@@ -1,8 +1,13 @@
+export interface AnyJson {
+  [key: string]: any;
+}
+
 export interface win extends Window {
   __platform__: string;
-  __POWERED_BY_QIANKUN__:boolean;
-  __INJECTED_PUBLIC_PATH_BY_QIANKUN__:string;
-  __webpack_public_path__:string;
+  __POWERED_BY_QIANKUN__: boolean;
+  __INJECTED_PUBLIC_PATH_BY_QIANKUN__: string;
+  __webpack_public_path__: string;
+  $theme: AnyJson;
 }
 
 export interface FormState {
@@ -224,10 +229,6 @@ export declare interface Pagination {
   totalPage?: number;
   totalResult?: number;
   pageSize?: number;
-}
-
-export interface AnyJson {
-  [key: string]: any;
 }
 
 export interface CommonStructure {

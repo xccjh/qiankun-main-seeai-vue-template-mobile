@@ -3,32 +3,28 @@ import { MicroApp } from 'qiankun/es/interfaces'
 import { app } from '@/main'
 import { serialPromises2 } from '@/common/utils'
 import store from '../store'
-export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, next:NavigationGuardNext) => {
-  if (to.path === '/login') {
-    if (store.getters.userInfo.token) {
-      microhandler(() => {
-        next({
-          name: 'home'
-        })
-      })
-    } else {
-      microhandler(() => {
-        next()
-      })
-    }
-  } else {
-    if (store.getters.userInfo.token) {
-      microhandler(() => {
-        next()
-      })
-    } else {
-      microhandler(() => {
-        next('/login')
-      })
+const { microAppSetting } = require('../../../../package.json')
+const currentSetting = microAppSetting[process.env.NODE_ENV][0]
+const appMainBase = currentSetting.activeRule.split('/#/')[0]
+const appMainName = appMainBase.split('/')[1]
+const gotoReview = (path) => {
+  const hashArr = location.href.split('#')
+  let preQuery = ''
+  let afterQuery = ''
+  if (hashArr && hashArr[0]) {
+    const preHash = hashArr[0].split(location.port)
+    if (preHash && preHash[1]) {
+      preQuery = preHash[1]
     }
   }
+  if (hashArr && hashArr[1]) {
+    const afterHash = hashArr[1].split('?')
+    if (afterHash && afterHash[1]) {
+      afterQuery = afterHash[1]
+    }
+  }
+  location.href = location.protocol + '//' + location.host + (preQuery || '/') + '#/' + path + (afterQuery ? '?' + afterQuery : '')
 }
-
 const microhandler = (next) => {
   // 路由跳转卸载局部微应用
   const micro: { [index: string]: MicroApp } = app.config.globalProperties.micro
@@ -53,5 +49,29 @@ const microhandler = (next) => {
     })
   } else {
     next()
+  }
+}
+export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, next:NavigationGuardNext) => {
+  if (to.path === '/login') {
+    if (store.getters.userInfo.token) {
+      microhandler(() => {
+        gotoReview(appMainName + '/home')
+        next()
+      })
+    } else {
+      microhandler(() => {
+        next()
+      })
+    }
+  } else {
+    if (store.getters.userInfo.token) {
+      microhandler(() => {
+        next()
+      })
+    } else {
+      microhandler(() => {
+        gotoReview('login')
+      })
+    }
   }
 }

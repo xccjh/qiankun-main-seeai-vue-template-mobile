@@ -3,6 +3,18 @@ import { ToolsUtil } from './tools.util'
 import { codeJsonAES } from './crypto'
 
 export class LocalStorageUtil {
+  static getTheme () {
+    return localStorage.getItem(ToolsUtil.createCacheKey('THEME'))
+  }
+
+  static putTheme (theme): void {
+    localStorage.setItem(ToolsUtil.createCacheKey('THEME'), theme)
+  }
+
+  static removeTheme () {
+    localStorage.removeItem(ToolsUtil.createCacheKey('THEME'))
+  }
+
   // 设置管理员信息
   static putAdminUser (userInfo: Json): void {
     localStorage.removeItem('SCHOLAR_ADMIN_INFO_' + ToolsUtil.getOrgCode())

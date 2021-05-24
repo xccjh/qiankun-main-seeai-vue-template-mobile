@@ -6,16 +6,33 @@ const { microAppSetting } = require('../../../../package.json')
 const currentSetting = microAppSetting[process.env.NODE_ENV].filter(item => item.name === name)[0]
 const mainSub = currentSetting.activeRule.split('#')
 const sub = mainSub[1]
+const subName = sub.split('/')[1]
 declare const window: win
-
+const gotoReview = (path) => {
+  const hashArr = location.href.split('#')
+  let preQuery = ''
+  let afterQuery = ''
+  if (hashArr && hashArr[0]) {
+    const preHash = hashArr[0].split(location.port)
+    if (preHash && preHash[1]) {
+      preQuery = preHash[1]
+    }
+  }
+  if (hashArr && hashArr[1]) {
+    const afterHash = hashArr[1].split('?')
+    if (afterHash && afterHash[1]) {
+      afterQuery = afterHash[1]
+    }
+  }
+  location.href = location.protocol + '//' + location.host + (preQuery || '/') + '#/' + path + (afterQuery ? '?' + afterQuery : '')
+}
 export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, next:NavigationGuardNext) => {
   const userInfo = SharedModule.getShared().getUserInfo()
   const token = userInfo.token
   if (to.path === sub + '/login') {
     if (token) {
-      next({
-        name: 'home'
-      })
+      gotoReview(subName + '/home')
+      next()
     } else {
       next()
     }
@@ -24,11 +41,12 @@ export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, 
       next()
     } else {
       if (window.__POWERED_BY_QIANKUN__) {
-        next('/login')
+        gotoReview('login')
+        next()
       } else {
-        next(sub + '/login')
+        gotoReview(subName + '/login')
+        next()
       }
     }
   }
-  next()
 }
