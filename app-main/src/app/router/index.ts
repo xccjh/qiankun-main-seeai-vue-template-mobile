@@ -31,6 +31,14 @@ const generateSubpageRoute = () => {
   return subpageRoutes
 }
 const routes: Array<RouteRecordRaw> = [
+  // {
+  //   path: '/empty',
+  //   component: () => import(/* webpackChunkName: "empty" */ '@common/components/empty-result/empty-result.vue'),
+  //   name: 'empty',
+  //   meta: {
+  //     name: 'empty'
+  //   }
+  // },
   {
     path: '/',
     name: 'index',

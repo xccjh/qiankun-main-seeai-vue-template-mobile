@@ -85,6 +85,7 @@ export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, 
     } else {
       microhandler(() => {
         gotoReview('login')
+        next()
       })
     }
   }

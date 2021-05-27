@@ -17,20 +17,20 @@ import '../style/index.scss'
 
 const app = createApp(App).use(store).use(router).use(CommonPart).use(vant)
 app.config.globalProperties.micro = {}
-// app.config.globalProperties.microApp = true
-// startQiankun({
-//   singular: false,
-//   prefetch: 'all',
-//   excludeAssetFilter: (assetUrl: string) => {
-//     const whiteList: string[] = []
-//     const whiteWords = ['baidu', 'meiqia', 'cookie/flash.js']
-//     if (whiteList.includes(assetUrl)) {
-//       return true
-//     }
-//     return whiteWords.some(w => {
-//       return assetUrl.includes(w)
-//     })
-//   }
-// })
+app.config.globalProperties.microApp = true
+startQiankun({
+  singular: false,
+  prefetch: 'all',
+  excludeAssetFilter: (assetUrl: string) => {
+    const whiteList: string[] = []
+    const whiteWords = ['baidu', 'meiqia', 'cookie/flash.js']
+    if (whiteList.includes(assetUrl)) {
+      return true
+    }
+    return whiteWords.some(w => {
+      return assetUrl.includes(w)
+    })
+  }
+})
 app.mount('#app')
 export { app }
