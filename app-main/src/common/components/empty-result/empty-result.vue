@@ -34,11 +34,10 @@ export default defineComponent({
   setup (props) {
     const router: Router = useRouter()
     const route: RouteLocationNormalizedLoaded = useRoute()
-    const { goUrl } = props
     return {
       goToUrl () {
         router.push({
-          path: goUrl
+          path: props.goUrl
         })
       }
     }
