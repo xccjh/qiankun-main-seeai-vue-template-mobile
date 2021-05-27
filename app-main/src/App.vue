@@ -2,7 +2,7 @@
   <div style='height:100%;overflow: hidden;'>
     <router-view/>
     <div id="frame"
-         v-if="((!(route?.path === '/login' || route?.path.indexOf('/micro-app-main') === 0)) || route?.path === '/') && microApp"></div>
+         v-if="(route?.path === '/' || !(route?.path === '/login' || route?.path.indexOf('/micro-student-main') === 0)) && microApp"></div>
   </div>
 </template>
 <script lang="ts">
