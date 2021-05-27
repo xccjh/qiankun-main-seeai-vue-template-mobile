@@ -7,6 +7,10 @@ const { microAppSetting } = require('../../../../package.json')
 const currentSetting = microAppSetting[process.env.NODE_ENV][0]
 const appMainBase = currentSetting.activeRule.split('/#/')[0]
 const appMainName = appMainBase.split('/')[1]
+/**
+ * 路由拦截保留查询参数跳转
+ * @param path string
+ */
 const gotoReview = (path) => {
   const hashArr = location.href.split('#')
   let preQuery = ''
@@ -25,6 +29,10 @@ const gotoReview = (path) => {
   }
   location.href = location.protocol + '//' + location.host + (preQuery || '/') + '#/' + path + (afterQuery ? '?' + afterQuery : '')
 }
+/**
+ * 路由跳转卸载局部微应用
+ * @param next NavigationGuardNext
+ */
 const microhandler = (next) => {
   // 路由跳转卸载局部微应用
   const micro: { [index: string]: MicroApp } = app.config.globalProperties.micro
@@ -51,6 +59,12 @@ const microhandler = (next) => {
     next()
   }
 }
+/**
+ * 路由守卫
+ * @param to RouteLocationNormalized
+ * @param from RouteLocationNormalized
+ * @param next NavigationGuardNext
+ */
 export const guard = (to:RouteLocationNormalized, from:RouteLocationNormalized, next:NavigationGuardNext) => {
   if (to.path === '/login') {
     if (store.getters.userInfo.token) {

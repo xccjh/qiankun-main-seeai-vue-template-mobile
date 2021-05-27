@@ -87,13 +87,21 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'index',
-    redirect: sub + '/login',
+    redirect: sub + '/home',
     meta: {
       name: '入口'
     }
   },
   LocalRoute,
-  mainRoute
+  mainRoute,
+  {
+    path: '/:catchAll(.*)*',
+    name: 'not-found',
+    component: () => import(/* webpackChunkName: "not-found" */ '@layout/NotFound.vue'),
+    meta: {
+      name: 'not-found'
+    }
+  }
 ]
 
 const router = createRouter({

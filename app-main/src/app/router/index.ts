@@ -9,9 +9,27 @@ import { DemoConstructRoute } from '../views/demo-construct'
 import { guard } from './guard'
 
 const { microAppSetting } = require('../../../../package.json')
-const currentSetting = microAppSetting[process.env.NODE_ENV][0]
+const config = microAppSetting[process.env.NODE_ENV]
+const currentSetting = config[0]
 const appMainBase = currentSetting.activeRule.split('/#/')[0]
 const appMainName = appMainBase.split('/')[1]
+/**
+ * 避开子路由404拦截
+ */
+const generateSubpageRoute = () => {
+  const subpageRoutes: Array<RouteRecordRaw> = []
+  config.forEach(sub => {
+    subpageRoutes.push({
+      path: `${sub.activeRule.split('/#')[1]}:catchAll(.*)*`,
+      name: sub.name,
+      component: () => import(/* webpackChunkName: "sub-page" */ '@layout/SubPage.vue'),
+      meta: {
+        name: sub.name
+      }
+    })
+  })
+  return subpageRoutes
+}
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -46,6 +64,15 @@ const routes: Array<RouteRecordRaw> = [
     name: 'login',
     meta: {
       name: '登录'
+    }
+  },
+  ...generateSubpageRoute(),
+  {
+    path: '/:catchAll(.*)*',
+    name: 'not-found',
+    component: () => import(/* webpackChunkName: "not-found" */ '@layout/NotFound.vue'),
+    meta: {
+      name: 'not-found'
     }
   }
 ]
